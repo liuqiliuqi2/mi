@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.liuqi.mi.dao.PriceDao">
+
+    <select id="PriceByPriceSpecialOffer" resultType="Price">
+        select *from price where price=#{price} and specialOffer=#{specialOffer}
+    </select>
+
+    <insert id="InsertPrice" parameterType="Price">
+        insert into price (price,specialOffer) values(#{price},#{specialOffer})
+    </insert>
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.liuqi.mi.dao.ReceivaddressDao">
+
+    <select id="getReceivaddressByMember_id" resultType="Receivaddress">
+        select *from receivaddress where member_id=#{member_id}
+    </select>
+
+    <insert id="InsertReceivaddress" parameterType="Receivaddress">
+        insert into receivaddress
+        (consignee,consigneePhone,receivAddress,detailedAddress,postalCode,addressLabels,member_id)
+        values
+        (#{consignee},#{consigneePhone},#{receivAddress},#{detailedAddress},#{postalCode},#{addressLabels},
+        #{member_id});
+    </insert>
+
+    <update id="UpdateReceivaddress" parameterType="Receivaddress">
+        update receivaddress set
+        consignee=#{consignee},consigneePhone=#{consigneePhone},receivAddress=#{receivAddress},
+        detailedAddress=#{detailedAddress},postalCode=#{postalCode},addressLabels=#{addressLabels}
+        where receivAddressId=#{receivAddressId}
+    </update>
+
+</mapper>

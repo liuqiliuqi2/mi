@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.liuqi.mi.dao.ProductDao">
+
+    <select id="getAllProduct" resultMap="Product_all" parameterType="map">
+        select *from product,price
+        <where>
+            product.priceId=price.priceId
+            <if test="pid!=null and pid!=''">
+                and pid like concat(concat('%',#{pid}),'%')
+            </if>
+            <if test="pname!=null and pname!=''">
+                and pname like concat(concat('%',#{pname}),'%')
+            </if>
+            <if test="ptid!=null and ptid!=''">
+                and ptid like concat(concat('%',#{ptid}),'%')
+            </if>
+            <if test="product_state!=null and product_state!=''">
+                and product_state=#{product_state}
+            </if>
+            <if test="rear_camera!=null and rear_camera!=''">
+                and rear_camera =#{rear_camera}
+            </if>
+            <if test="front_facing_camera!=null and front_facing_camera!=''">
+                and front_facing_camera =#{front_facing_camera}
+            </if>
+            <if test="network_model!=null and network_model!=''">
+                and network_model =#{network_model}
+            </if>
+            <if test="type_of_network!=null and type_of_network!=''">
+                and type_of_network =#{type_of_network}
+            </if>
+            <if test="screen_resolution!=null and screen_resolution!=''">
+                and screen_resolution =#{screen_resolution}
+            </if>
+            <if test="number_of_CPU_core!=null and number_of_CPU_core!=''">
+                and number_of_CPU_core =#{number_of_CPU_core}
+            </if>
+            <if test="milestonemin!=null and milestonemin!=''">
+                and milestone>#{milestonemin}
+            </if>
+            <if test="milestonemax!=null and milestonemax!=''">
+                and #{milestonemax}>milestone
+            </if>
+            <if test="battery_capacitymin!=null and battery_capacitymin!=''">
+                and battery_capacity>#{battery_capacitymin}
+            </if>
+            <if test="battery_capacitymax!=null and battery_capacitymax!=''">
+                and #{battery_capacitymax}>battery_capacity
+            </if>
+            <if test="screen_sizemin!=null and screen_sizemin!=''">
+                and screen_size >#{screen_sizemin}
+            </if>
+            <if test="screen_sizemax!=null and screen_sizemax!=''">
+                and #{screen_sizemax}>screen_size
+            </if>
+        </where>
+         ORDER BY product_insert_date DESC limit #{skip},#{size}
+    </select>
+    <resultMap id="Product_all" type="Product">
+        <id property="pid" column="pid"></id>
+        <result property="pname" column="pname"></result>
+        <result property="image_url" column="image_url"></result>
+        <result property="product_state" column="product_state"></result>
+        <result property="describes" column="describes"></result>
+        <result property="product_insert_date" column="product_insert_date"></result>
+        <result property="priceId" column="priceId"></result>
+        <result property="new_product" column="new_product"></result>
+        <!--映射关系，指定属性与属性的类型-->
+        <association property="price" javaType="Price">
+            <id property="priceId" column="priceId"></id>
+            <result property="price" column="price"></result>
+            <result property="specialOffer" column="specialOffer"></result>
+        </association>
+    </resultMap>
+
+    <select id="getProductCount" resultType="int">
+        select count(*) from product
+        <where>
+            <if test="pid!=null and pid!=''">
+                and pid like concat(concat('%',#{pid}),'%')
+            </if>
+            <if test="pname!=null and pname!=''">
+                and pname like concat(concat('%',#{pname}),'%')
+            </if>
+            <if test="ptid!=null and ptid!=''">
+                and ptid like concat(concat('%',#{ptid}),'%')
+            </if>
+            <if test="product_state!=null and product_state!=''">
+                and product_state=#{product_state}
+            </if>
+            <if test="rear_camera!=null and rear_camera!=''">
+                and rear_camera =#{rear_camera}
+            </if>
+            <if test="front_facing_camera!=null and front_facing_camera!=''">
+                and front_facing_camera =#{front_facing_camera}
+            </if>
+            <if test="network_model!=null and network_model!=''">
+                and network_model =#{network_model}
+            </if>
+            <if test="type_of_network!=null and type_of_network!=''">
+                and type_of_network =#{type_of_network}
+            </if>
+            <if test="screen_resolution!=null and screen_resolution!=''">
+                and screen_resolution =#{screen_resolution}
+            </if>
+            <if test="number_of_CPU_core!=null and number_of_CPU_core!=''">
+                and number_of_CPU_core =#{number_of_CPU_core}
+            </if>
+            <if test="milestonemin!=null and milestonemin!=''">
+                and milestone>#{milestonemin}
+            </if>
+            <if test="milestonemax!=null and milestonemax!=''">
+                and #{milestonemax}>milestone
+            </if>
+            <if test="battery_capacitymin!=null and battery_capacitymin!=''">
+                and battery_capacity>#{battery_capacitymin}
+            </if>
+            <if test="battery_capacitymax!=null and battery_capacitymax!=''">
+                and #{battery_capacitymax}>battery_capacity
+            </if>
+            <if test="screen_sizemin!=null and screen_sizemin!=''">
+                and screen_size >#{screen_sizemin}
+            </if>
+            <if test="screen_sizemax!=null and screen_sizemax!=''">
+                and #{screen_sizemax}>screen_size
+            </if>
+        </where>
+    </select>
+
+    <select id="ProductByPid" resultMap="Product_pid" parameterType="map">
+        select *from product,price where product.priceId=price.priceId and pid=#{pid}
+    </select>
+    <resultMap id="Product_pid" type="Product">
+        <id property="pid" column="pid"></id>
+        <result property="pname" column="pname"></result>
+        <result property="ptid" column="ptid"></result>
+        <result property="new_product" column="new_product"></result>
+        <result property="image_url" column="image_url"></result>
+        <result property="product_state" column="product_state"></result>
+        <result property="describes" column="describes"></result>
+        <result property="screen_size" column="screen_size"></result>
+        <result property="rear_camera" column="rear_camera"></result>
+        <result property="front_facing_camera" column="front_facing_camera"></result>
+        <result property="battery_capacity" column="battery_capacity"></result>
+        <result property="type_of_network" column="type_of_network"></result>
+        <result property="screen_resolution" column="screen_resolution"></result>
+        <result property="number_of_CPU_core" column="number_of_CPU_core"></result>
+        <result property="milestone" column="milestone"></result>
+        <result property="network_model" column="network_model"></result>
+        <result property="product_insert_date" column="product_insert_date"></result>
+        <result property="priceId" column="priceId"></result>
+        <!--映射关系，指定属性与属性的类型-->
+        <association property="price" javaType="Price">
+            <id property="priceId" column="priceId"></id>
+            <result property="price" column="price"></result>
+            <result property="specialOffer" column="specialOffer"></result>
+        </association>
+    </resultMap>
+
+    <!--新增加商品 -->
+    <insert id="InsertProduct" parameterType="product">
+        insert into product
+        (pname,ptid,screen_size,rear_camera,front_facing_camera,battery_capacity,type_of_network,
+        screen_resolution,number_of_CPU_core,milestone,network_model,describes,image_url,product_insert_date)
+        values
+        (#{pname},#{ptid},#{screen_size},#{rear_camera},#{front_facing_camera},#{battery_capacity},
+        #{type_of_network},#{screen_resolution},#{number_of_CPU_core},#{milestone},
+        #{network_model},#{describes},#{image_url},NOW());
+    </insert>
+
+    <!-- 删除商品 -->
+    <delete id="DeleteProduct">
+        delete from product where pid =#{pid}
+    </delete>
+
+    <!-- 多删除商品 -->
+    <delete id="MoreDeleteProduct">
+        delete from product
+        where pid in
+        <foreach collection="pids" open="(" item="pid" separator="," close=")">
+            #{pid}
+        </foreach>
+    </delete>
+
+    <!-- 修改商品 -->
+    <update id="UpdateProduct" parameterType="product">
+        update product set
+        pname=#{pname},ptid=#{ptid},screen_size=#{screen_size},rear_camera=#{rear_camera},
+        front_facing_camera=#{front_facing_camera},battery_capacity=#{battery_capacity},
+        type_of_network=#{type_of_network},screen_resolution=#{screen_resolution},number_of_CPU_core=#{number_of_CPU_core},
+        milestone=#{milestone},network_model=#{network_model},describes=#{describes}
+        where pid=#{pid}
+    </update>
+
+    <!-- 修改商品状态 -->
+    <update id="UpdateProduct_state" parameterType="product">
+        update product set
+        product_state=#{product_state}
+        where pid=#{pid}
+    </update>
+
+     <!--商品库存-->
+    <update id="AddProductAmount" parameterType="product">
+        update product set
+        amount=#{amount}
+        where pid=#{pid}
+    </update>
+
+</mapper>

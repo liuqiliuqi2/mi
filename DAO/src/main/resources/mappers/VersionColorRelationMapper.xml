@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.liuqi.mi.dao.VersioncolorrelationDao">
+
+    <select id="getColorNameByVersionId" resultMap="ColorName_all" parameterType="map">
+        select DISTINCT c.colorId,c.colorName
+        from versioncolorrelation vc,version v,color c
+        WHERE vc.versionId=v.versionId AND vc.colorId=c.colorId
+        AND vc.versionId=#{versionId}
+    </select>
+    <!--关联查询结果映射-->
+    <resultMap id="ColorName_all" type="Versioncolorrelation">
+        <id property="versionColorId" column="versionColorId"></id>
+        <result property="versionId" column="versionId"></result>
+        <result property="colorId" column="colorId"></result>
+        <result property="pictureId" column="pictureId"></result>
+        <result property="versionColorAmount" column="versionColorAmount"></result>
+        <!--映射关系，指定属性与属性的类型-->
+        <association property="version" javaType="Version">
+            <id property="versionId" column="versionId"></id>
+        </association>
+        <!--映射关系，指定属性与属性的类型-->
+        <association property="color" javaType="Color">
+            <id property="colorId" column="colorId"></id>
+            <result property="colorName" column="colorName"></result>
+        </association>
+    </resultMap>
+
+
+    <select id="getPictureSrcByVersionIdAndColorId" resultMap="PictureSrc_all" parameterType="map">
+        select p.pictureSrc
+        from versioncolorrelation vc,version v,color c,picture p
+        WHERE vc.versionId=v.versionId AND vc.colorId=c.colorId AND vc.pictureId=p.pictureId
+        AND vc.versionId=#{versionId} AND vc.colorId=#{colorId}
+    </select>
+    <!--关联查询结果映射-->
+    <resultMap id="PictureSrc_all" type="Versioncolorrelation">
+        <id property="versionColorId" column="versionColorId"></id>
+        <result property="versionId" column="versionId"></result>
+        <result property="colorId" column="colorId"></result>
+        <result property="pictureId" column="pictureId"></result>
+        <result property="versionColorAmount" column="versionColorAmount"></result>
+        <!--映射关系，指定属性与属性的类型-->
+        <association property="version" javaType="Version">
+            <id property="versionId" column="versionId"></id>
+        </association>
+        <!--映射关系，指定属性与属性的类型-->
+        <association property="color" javaType="Color">
+            <id property="colorId" column="colorId"></id>
+            <result property="colorName" column="colorName"></result>
+        </association>
+        <!--映射关系，指定属性与属性的类型-->
+        <association property="picture" javaType="Picture">
+            <id property="pictureId" column="pictureId"></id>
+            <result property="pictureSrc" column="pictureSrc"></result>
+        </association>
+    </resultMap>
+
+
+</mapper>

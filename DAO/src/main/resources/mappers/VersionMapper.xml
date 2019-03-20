@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.liuqi.mi.dao.VersionDao">
+
+    <select id="VersionBypid" resultMap="Version_all" parameterType="map">
+        select v.versionId,r.randomAccessMemorySize,m.memoryCapacitySize,v.versionName,
+        pr.price,pr.specialOffer,p.pname,p.describes
+        from version v,randomaccessmemory r,memorycapacity m,product p,price pr
+        WHERE v.randomAccessMemoryId=r.randomAccessMemoryId AND v.memoryCapacityId=m.memoryCapacityId AND v.pid=p.pid AND v.priceId=pr.priceId
+        AND v.pid=#{pid}
+    </select>
+    <!--关联查询结果映射-->
+    <resultMap id="Version_all" type="Version">
+        <id property="versionId" column="versionId"></id>
+        <result property="randomAccessMemoryId" column="randomAccessMemoryId"></result>
+        <result property="memoryCapacityId" column="memoryCapacityId"></result>
+        <result property="versionName" column="versionName"></result>
+        <result property="versionSpecial_offer" column="versionSpecial_offer"></result>
+        <result property="versionPrice" column="versionPrice"></result>
+        <result property="pid" column="pid"></result>
+        <!--映射关系，指定属性与属性的类型-->
+        <association property="randomaccessmemory" javaType="Randomaccessmemory">
+            <id property="randomAccessMemoryId" column="randomAccessMemoryId"></id>
+            <result property="randomAccessMemorySize" column="randomAccessMemorySize"></result>
+        </association>
+        <!--映射关系，指定属性与属性的类型-->
+        <association property="memorycapacity" javaType="Memorycapacity">
+            <id property="memoryCapacityId" column="memoryCapacityId"></id>
+            <result property="memoryCapacitySize" column="memoryCapacitySize"></result>
+        </association>
+        <!--映射关系，指定属性与属性的类型-->
+        <association property="product" javaType="Product">
+            <id property="pid" column="pid"></id>
+            <result property="pname" column="pname"></result>
+            <result property="describes" column="describes"></result>
+        </association>
+        <!--映射关系，指定属性与属性的类型-->
+        <association property="price" javaType="Price">
+            <id property="priceId" column="priceId"></id>
+            <result property="price" column="price"></result>
+            <result property="specialOffer" column="specialOffer"></result>
+        </association>
+    </resultMap>
+
+</mapper>

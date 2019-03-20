@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.liuqi.mi.dao.MemberDao">
+
+    <select id="getAllMember" resultType="member">
+        select member_id,`password`,phone,`name`,birthday,sex,mail,address,registerdate,
+        member_state,describes,YEAR(NOW())-year(birthday) age from member
+        <where>
+            <if test="member_id!=null and member_id!=''">
+                and member_id like concat(concat('%',#{member_id}),'%')
+            </if>
+            <if test="name!=null and name!=''">
+                and name like concat(concat('%',#{name}),'%')
+            </if>
+            <if test="sex!=null and sex!=''">
+                and sex =#{sex}
+            </if>
+            <if test="phone!=null and phone!=''">
+                and phone like concat(concat('%',#{phone}),'%')
+            </if>
+            <if test="mail!=null and mail!=''">
+                and mail like concat(concat('%',#{mail}),'%')
+            </if>
+            <if test="member_state!=null and member_state!=''">
+                and member_state =#{member_state}
+            </if>
+            <if test="agemin!=null and agemin!=''">
+                and (YEAR(NOW())-year(birthday)) >#{agemin}
+            </if>
+            <if test="agemax!=null and agemax!=''">
+                and #{agemax}>(YEAR(NOW())-year(birthday))
+            </if>
+            <if test="birthdymin!=null and birthdymin!=''">
+                and birthday >#{birthdymin}
+            </if>
+            <if test="birthdymax!=null and birthdymax!=''">
+                and #{birthdymax}>birthday
+            </if>
+            <if test="registerdatemin!=null and registerdatemin!=''">
+                and registerdate >#{registerdatemin}
+            </if>
+            <if test="registerdatemax!=null and registerdatemax!=''">
+                and #{registerdatemax}>registerdate
+            </if>
+            <if test="address!=null and address!=''">
+                and address like concat(concat('%',#{address}),'%')
+            </if>
+        </where>
+          limit #{skip},#{size}
+    </select>
+
+    <select id="getMemberByMember_id" resultType="member">
+        select member_id,`password`,phone,`name`,birthday,sex,mail,address,registerdate,
+        member_state,describes,YEAR(NOW())-year(birthday) age
+        from member where member_id=#{member_id}
+
+    </select>
+
+    <select id="getMemberCount" resultType="int">
+        select count(*) from member
+        <where>
+            <if test="member_id!=null and member_id!=''">
+                and member_id like concat(concat('%',#{member_id}),'%')
+            </if>
+            <if test="name!=null and name!=''">
+                and name like concat(concat('%',#{name}),'%')
+            </if>
+            <if test="sex!=null and sex!=''">
+                and sex =#{sex}
+            </if>
+            <if test="phone!=null and phone!=''">
+                and phone like concat(concat('%',#{phone}),'%')
+            </if>
+            <if test="mail!=null and mail!=''">
+                and mail like concat(concat('%',#{mail}),'%')
+            </if>
+            <if test="member_state!=null and member_state!=''">
+                and member_state =#{member_state}
+            </if>
+            <if test="agemin!=null and agemin!=''">
+                and (YEAR(NOW())-year(birthday)) >#{agemin}
+            </if>
+            <if test="agemax!=null and agemax!=''">
+                and #{agemax}>(YEAR(NOW())-year(birthday))
+            </if>
+            <if test="birthdymin!=null and birthdymin!=''">
+                and birthday >#{birthdymin}
+            </if>
+            <if test="birthdymax!=null and birthdymax!=''">
+                and #{birthdymax}>birthday
+            </if>
+            <if test="registerdatemin!=null and registerdatemin!=''">
+                and registerdate >#{registerdatemin}
+            </if>
+            <if test="registerdatemax!=null and registerdatemax!=''">
+                and #{registerdatemax}>registerdate
+            </if>
+            <if test="address!=null and address!=''">
+                and address like concat(concat('%',#{address}),'%')
+            </if>
+        </where>
+    </select>
+    <select id="getMember_id" resultType="member">
+          select member_id from member ORDER BY member_id DESC limit 0,1
+    </select>
+
+    <insert id="InsertMember" parameterType="member">
+        insert into member (password,phone,registerdate)
+        values(#{password},#{phone},NOW())
+    </insert>
+
+    <update id="UpdateMember" parameterType="member">
+        update member set name=#{name},birthday=#{birthday},sex=#{sex}
+        where member_id=#{member_id}
+    </update>
+
+    <!-- 删除会员 -->
+    <delete id="member_del">
+        delete from member where member_id =#{member_id}
+    </delete>
+
+    <!-- 多删除会员 -->
+    <delete id="member_Moredel">
+        delete from member
+        where member_id in
+        <foreach collection="member_ids" open="(" item="member_id" separator="," close=")">
+            #{member_id}
+        </foreach>
+    </delete>
+
+    <!-- 修改会员状态 -->
+    <update id="UpdateMember_state" parameterType="member">
+        update member set
+        member_state=#{member_state}
+        where member_id=#{member_id}
+    </update>
+
+    <!-- 重置会员密码 -->
+    <update id="Reset_password" parameterType="member">
+        update member set
+        password='123456'
+        where member_id=#{member_id}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.liuqi.mi.dao.OrderproductDao">
+
+    <!--<select id="getOrderProductByorderState" resultMap="OrderProduct_all">-->
+        <!--select * from `order` o,orderproduct op-->
+        <!--<where>            -->
+            <!--o.orderId=op.orderId and member_id=#{member_id}-->
+            <!--<if test="orderState!='全部有效订单'">-->
+                <!--and orderState =#{orderState}-->
+            <!--</if>-->
+            <!--<if test="orderState == '全部有效订单'">-->
+                <!--AND orderState!="已关闭"-->
+            <!--</if>-->
+        <!--</where>-->
+    <!--</select>-->
+    <!--<resultMap id="OrderProduct_all" type="OrderProduct">-->
+        <!--<id property="orderProductId" column="orderProductId"></id>-->
+        <!--<result property="orderProductName" column="orderProductName"></result>-->
+        <!--<result property="orderProductPrice" column="orderProductPrice"></result>-->
+        <!--<result property="orderProductAmount" column="orderProductAmount"></result>-->
+        <!--<result property="orderPictureSrc" column="orderPictureSrc"></result>-->
+        <!--<result property="orderId" column="orderId"></result>-->
+        <!--&lt;!&ndash;映射关系，指定属性与属性的类型&ndash;&gt;-->
+        <!--<association property="order" javaType="Order">-->
+            <!--<id property="orderId" column="orderId"></id>-->
+            <!--<result property="orderPrice" column="orderPrice"></result>-->
+            <!--<result property="orderState" column="orderState"></result>-->
+            <!--<result property="orderDate" column="orderDate"></result>-->
+            <!--<result property="consignee" column="consignee"></result>-->
+            <!--<result property="consigneePhone" column="consigneePhone"></result>-->
+            <!--<result property="receivAddress" column="receivAddress"></result>-->
+            <!--<result property="detailedAddress" column="detailedAddress"></result>-->
+            <!--<result property="postalCode" column="postalCode"></result>-->
+            <!--<result property="addressLabels" column="addressLabels"></result>-->
+            <!--<result property="member_id" column="member_id"></result>-->
+        <!--</association>-->
+    <!--</resultMap>-->
+
+    <select id="OrderproductOrderProductNameByOrderId" resultType="Orderproduct">
+        select orderProductName from orderproduct where orderId=#{orderId}
+    </select>
+
+    <insert id="InsertOrderproduct" parameterType="Orderproduct">
+        INSERT INTO orderproduct
+        (orderProductName,orderProductPrice,orderProductAmount,orderPictureSrc,orderId)
+        select cname,cprice,camount,image_url,orderId from cartCheckedList
+    </insert>
+
+
+</mapper>

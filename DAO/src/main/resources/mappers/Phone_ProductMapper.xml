@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.liuqi.mi.dao.Phone_Product_Dao">
+    <!--id应该是接口中的方法，结果类型如没有配置别名则应该使用全名称 -->
+    <select id="getAllPhone_Product" resultType="phone_product">
+        select *from phone_product
+        <where>
+            <if test="phone_name!=null and phone_name!=''">
+                and phone_name like concat(concat('%',#{phone_name}),'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getPhone_ProductById" resultType="phone_product">
+        select *from phone_product where id=#{id}
+    </select>
+
+    <!-- 删除商品 -->
+    <delete id="DeletePhone_Product">
+        delete from phone_product where id=#{id}
+    </delete>
+
+    <!--新增加商品 -->
+    <insert id="InsertPhone_Product" parameterType="phone_product">
+        insert into phone_product(id,phone_name,price,special_offer,product_describe) values(#{id},#{phone_name},#{price},#{special_offer},#{product_describe});
+    </insert>
+
+    <!-- 修改商品 -->
+    <update id="UpdatePhone_Product" parameterType="phone_product">
+        update phone_product set
+        phone_name=#{phone_name},price=#{price},special_offer=#{special_offer},product_describe=#{product_describe} where id=#{id}
+    </update>
+
+</mapper>

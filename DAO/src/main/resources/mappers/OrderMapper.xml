@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.liuqi.mi.dao.OrderDao">
+
+
+    <select id="getAllOrder" resultType="Order">
+        select * from `order`
+        limit #{skip},#{size}
+    </select>
+
+    <select id="getOrderCount" resultType="int">
+        select count(*) from `order`
+    </select>
+
+    <select id="getOrderByMember_idAndorderState" resultMap="Order_all" parameterType="map">
+        select * from `order` o,orderproduct op
+        <where>
+            o.orderId=op.orderId and member_id=#{member_id}
+            <if test="orderState!='全部有效订单'">
+                and orderState =#{orderState}
+            </if>
+            <if test="orderState == '全部有效订单'">
+                AND orderState!="已关闭"
+            </if>
+        </where>
+    </select>
+    <resultMap id="Order_all" type="Order">
+        <id property="orderId" column="orderId"></id>
+        <result property="orderPrice" column="orderPrice"></result>
+        <result property="orderState" column="orderState"></result>
+        <result property="orderDate" column="orderDate"></result>
+        <result property="consignee" column="consignee"></result>
+        <result property="consigneePhone" column="consigneePhone"></result>
+        <result property="receivAddress" column="receivAddress"></result>
+        <result property="detailedAddress" column="detailedAddress"></result>
+        <result property="postalCode" column="postalCode"></result>
+        <result property="addressLabels" column="addressLabels"></result>
+        <result property="member_id" column="member_id"></result>
+        <!--映射集合，指定属性与属性的类型-->
+        <collection property="orderproductList" resultMap="orderproductLists">
+
+        </collection>
+    </resultMap>
+
+    <resultMap id="orderproductLists" type="orderproduct">
+        <id property="orderProductId" column="orderProductId"></id>
+        <result property="orderProductName" column="orderProductName"></result>
+        <result property="orderProductPrice" column="orderProductPrice"></result>
+        <result property="orderProductAmount" column="orderProductAmount"></result>
+        <result property="orderPictureSrc" column="orderPictureSrc"></result>
+        <result property="orderId" column="orderId"></result>
+    </resultMap>
+
+
+
+
+
+
+    <!--查询添加的订单编号-->
+    <select id="getOrderId" resultType="Order">
+        SELECT orderId from `order` where member_id=#{member_id} ORDER BY orderId DESC LIMIT 0,1
+    </select>
+
+    <select id="OrderByOrderId" resultType="Order">
+        select *from `order` where orderId=#{orderId}
+    </select>
+
+    <insert id="InsertOrder" parameterType="Order">
+        INSERT INTO `order` (orderPrice,orderDate,consignee,consigneePhone,receivAddress,detailedAddress,postalCode,addressLabels,member_id)
+        VALUES (#{orderPrice},NOW(),#{consignee},#{consigneePhone},#{receivAddress},#{detailedAddress},#{postalCode},#{addressLabels},#{member_id})
+    </insert>
+
+    <update id="UpdateOrderState" parameterType="Order">
+        update `order` set
+        orderState=#{orderState}
+        where orderId=#{orderId}
+    </update>
+
+</mapper>

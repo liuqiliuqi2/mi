@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.liuqi.mi.dao.CartDao">
+
+    <select id="getAllCart" resultType="cart">
+        select *from cart where member_id=#{member_id} ORDER BY cid DESC
+    </select>
+
+    <select id="getCartByMaxCid" resultType="cart">
+        select * FROM cart where member_id=#{member_id} ORDER BY cid DESC LIMIT 0,1
+    </select>
+
+    <select id="CartByCid" resultType="cart">
+        select *from cart where cid=#{cid}
+    </select>
+
+    <select id="CartByCname" resultType="cart">
+        select *from cart where cname=#{cname} and member_id=#{member_id}
+    </select>
+
+    <select id="getCartProductCount" resultType="int">
+        select count(*) from cart where member_id=#{member_id}
+    </select>
+
+    <delete id="DeleteCart">
+        delete from cart where cid =#{cid}
+    </delete>
+
+    <delete id="MoreDeleteCart">
+        delete from cart
+        where cid in
+        <foreach collection="cids" open="(" item="cid" separator="," close=")">
+            #{cid}
+        </foreach>
+    </delete>
+
+    <!-- 商品库存 -->
+    <update id="UpdateCartProductCamount" parameterType="cart">
+        update cart set
+        camount=#{camount}
+        where cid=#{cid}
+    </update>
+
+
+    <insert id="InsertCartProduct" parameterType="cart">
+        insert into cart
+        (image_url,cname,cprice,pid,member_id)
+        values
+        (#{image_url},#{cname},#{cprice},#{pid},#{member_id});
+    </insert>
+
+</mapper>

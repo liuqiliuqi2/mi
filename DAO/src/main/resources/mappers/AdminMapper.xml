@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.liuqi.mi.dao.AdminDao">
+
+    <select id="AdminByAdmin_name" resultType="admin">
+        select *from admin where admin_name=#{admin_name}
+    </select>
+
+    <insert id="InsertAdmin" parameterType="admin">
+        insert into admin (admin_name,admin_password) values(#{admin_name},#{admin_password})
+    </insert>
+
+</mapper>
